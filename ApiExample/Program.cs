@@ -50,6 +50,9 @@ builder.Services.AddIdentityCore<User>(opt =>
     opt.User.RequireUniqueEmail = true;
 })
     .AddRoles<Role>()
+    .AddRoleManager<RoleManager<Role>>()
+    .AddSignInManager<SignInManager<User>>()
+    .AddRoleValidator<RoleValidator<Role>>()
     .AddEntityFrameworkStores<ApiExampleContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
    .AddJwtBearer(opt =>

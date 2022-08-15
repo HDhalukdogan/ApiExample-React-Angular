@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ApiExample.Data;
 using ApiExample.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiExample.Controllers
 {
@@ -75,6 +76,7 @@ namespace ApiExample.Controllers
 
         // POST: api/SampleEntities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles ="admin")]
         [HttpPost]
         public async Task<ActionResult<SampleEntity>> PostSampleEntity(SampleEntity sampleEntity)
         {
