@@ -29,6 +29,23 @@ namespace ApiExample.EmailSenderService
                 Body = $"<a href='{link}'>şifre yenileme linki</a>",
                 Priority = MailPriority.High
             });
+        }       
+        public static void SendEmailToManyWithAttachment(List<MailAddress> mailAddresses,string body, byte[] bytesData)
+        {
+            var att = new MemoryStream(bytesData, false);
+            List<Attachment> attachment = new List<Attachment> { new Attachment(att, "Name.pdf", "application/pdf") };
+
+            MessageService mailService = new MessageService();
+            mailService.SendEmail(
+            new EmailModel
+            {
+                From = new MailAddress("yourEmail"),
+                ToMany = mailAddresses,
+                Subject = "ŞifreSıfırlama",
+                Body = body,
+                Priority = MailPriority.High,
+                AttachmentFiles = attachment
+            });
         }
     }
 }
