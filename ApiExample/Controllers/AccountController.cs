@@ -1,5 +1,6 @@
 ﻿using ApiExample.Data;
 using ApiExample.DTOs;
+using ApiExample.EmailSenderService;
 using ApiExample.Entities;
 using ApiExample.Services;
 using Microsoft.AspNetCore.Http;
@@ -29,13 +30,65 @@ namespace ApiExample.Controllers
         {
             var user = new User { UserName = name, Email = email };
 
-            await _userManager.CreateAsync(user, password);
+            IdentityResult result = await _userManager.CreateAsync(user, password);
 
             await _userManager.AddToRoleAsync(user, "member");
 
+            //if (result.Succeeded)
+            //{
+            //    string confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            //    string link = Url.Action("ConfirmEmail", "Home", new
+            //    {
+            //        userId = user.Id,
+            //        token = confirmationToken
+            //    }, protocol: HttpContext.Request.Scheme
+
+            //    );
+
+            //    EmailHelper.EmailConfirmationSendEmail(link, user.Email);
+
+            //}
+            //else
+            //{
+            //    //throw exception
+            //}
 
             return StatusCode(201);
         }
+
+
+        //[HttpPost]
+        //public IActionResult ResetPassword(string email, string newPassword)
+        //{
+
+        //    User user = _userManager.FindByEmailAsync(email).Result;
+
+        //    if (user != null)
+
+        //    {
+        //        string passwordResetToken = _userManager.GeneratePasswordResetTokenAsync(user).Result;
+
+        //        string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+        //        {
+        //            userId = user.Id,
+        //            token = passwordResetToken
+        //        }, HttpContext.Request.Scheme);
+
+        //        //  www.bıdıbıdı.com/Home/ResetPasswordConfirm?userId=sdjfsjf&token=dfjkdjfdjf
+
+        //        EmailHelper.PasswordResetSendEmail(passwordResetLink, user.Email);
+
+
+        //    }
+        //    else
+        //    {
+        //        //throw error
+        //    }
+        //    return Ok();
+
+        //}
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(string name, string password)
         {
@@ -56,7 +109,7 @@ namespace ApiExample.Controllers
         public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
         {
             return await _userManager.Users.ToListAsync();
-            
+
         }
 
         [HttpPost("create-role")]
