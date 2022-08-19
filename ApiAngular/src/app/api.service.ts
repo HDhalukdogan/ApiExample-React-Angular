@@ -6,12 +6,15 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  public getAll(){
+  public getAll() {
     return this.http.get("http://localhost:5065/api/SampleEntities")
   }
-  public getAllUsers(){
+  public getAllUsers() {
     return this.http.get("http://localhost:5065/api/Account/getAllUser")
+  }
+  public postFile(formData) {
+    return this.http.post("http://localhost:5065/api/file", formData, { reportProgress: true, observe: 'events' })
   }
 }

@@ -6,11 +6,13 @@ import { DataTablesModule } from 'angular-datatables';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EntityListComponent } from './entity-list/entity-list.component';
+import { UploadComponent } from './upload/upload.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    EntityListComponent
+    EntityListComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,

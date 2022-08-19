@@ -5,6 +5,7 @@ import UserCard from './UserCard';
 import { Container } from '@mui/material';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import ListComponent from './ListComponent';
+import FileUpload from './FileUpload';
 //https://laratutorials.com/react-datatables-dynamic-data-example/
 function App() {
   const [users, setUsers] = useState([]);
@@ -40,6 +41,7 @@ function App() {
           <UserCard key={user.id} userName={user.userName} email={user.email} />
         ))}
       </Container>
+      <FileUpload/>
     </div>
   );
 }
