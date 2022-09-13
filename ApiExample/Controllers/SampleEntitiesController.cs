@@ -71,12 +71,12 @@ namespace ApiExample.Controllers
                 }
             }
 
-            return NoContent();
+            return CreatedAtAction("GetSampleEntity", sampleEntity);
         }
 
         // POST: api/SampleEntities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [Authorize(Roles ="admin")]
+        //[Authorize(Roles ="admin")]
         [HttpPost]
         public async Task<ActionResult<SampleEntity>> PostSampleEntity(SampleEntity sampleEntity)
         {
