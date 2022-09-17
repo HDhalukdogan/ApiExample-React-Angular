@@ -21,9 +21,9 @@ const request = {
 const Sample = {
     list: () => request.get('SampleEntities'),
     details: (id: number) => request.get(`SampleEntities/${id}`),
-    createProduct: (sample: any) => request.postForm('SampleEntities', sample),
-    updateProduct: (sample: any,id:number) => request.putForm(`SampleEntities/${id}`, sample),
-    deleteProduct: (id: number) => request.delete(`SampleEntities/${id}`)
+    createSample: (sample: any) => request.post('SampleEntities', sample),
+    updateSample: (sample: any,id:number) => request.put(`SampleEntities/${id}`, sample),
+    deleteSample: (id: number) => request.delete(`SampleEntities/${id}`)
 }
 
 const agent = {Sample}
