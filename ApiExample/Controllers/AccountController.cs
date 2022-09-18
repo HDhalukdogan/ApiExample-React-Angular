@@ -3,6 +3,7 @@ using ApiExample.DTOs;
 using ApiExample.EmailSenderService;
 using ApiExample.Entities;
 using ApiExample.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,11 +27,11 @@ namespace ApiExample.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register(string name, string email, string password)
+        public async Task<ActionResult> Register(RegisterDto registerDto)
         {
-            var user = new User { UserName = name, Email = email };
+            var user = new User { UserName = registerDto.Name, Email = registerDto.Email };
 
-            IdentityResult result = await _userManager.CreateAsync(user, password);
+            IdentityResult result = await _userManager.CreateAsync(user, registerDto.Password);
 
             await _userManager.AddToRoleAsync(user, "member");
 
@@ -56,7 +57,19 @@ namespace ApiExample.Controllers
 
             return StatusCode(201);
         }
+        [Authorize]
+        [HttpGet("currentUser")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
+
+            return new UserDto
+            {
+                Email = user.Email,
+                Token = await _tokenService.GenerateToken(user),
+            };
+        }
 
         //[HttpPost]
         //public IActionResult ResetPassword(string email, string newPassword)
@@ -90,10 +103,10 @@ namespace ApiExample.Controllers
         //}
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(string name, string password)
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByNameAsync(name);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, password))
+            var user = await _userManager.FindByNameAsync(loginDto.Name);
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
                 return Unauthorized();
 
 

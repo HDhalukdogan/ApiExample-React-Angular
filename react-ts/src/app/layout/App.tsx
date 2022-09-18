@@ -6,10 +6,24 @@ import SampleCreate from "../../features/sample/SampleCreate";
 import SampleEdit from "../../features/sample/SampleEdit";
 import Login from "../../features/account/Login";
 import Register from "../../features/account/Register";
+import { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchCurrentUser } from "../../features/account/accountSlice";
 
 function App() {
 
+  const dispatch = useDispatch()
 
+  const initApp = useCallback(async () => {
+    try {
+      await dispatch(fetchCurrentUser() as any)
+    } catch (error) {
+      console.log(error);
+    }
+  }, [dispatch])
+  useEffect(() => {
+    initApp()
+  }, [initApp])
   return (
     <div className="App">
       <Header />

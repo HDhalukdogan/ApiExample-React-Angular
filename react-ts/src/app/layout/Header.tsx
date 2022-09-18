@@ -1,11 +1,13 @@
 import Nav from 'react-bootstrap/Nav';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { NavLink } from 'react-router-dom';
+import { signOut } from '../../features/account/accountSlice';
+import { useAppDispatch, useAppSelector } from '../store/configureStore';
 
 const Header = () => {
-
+    const { user } = useAppSelector(state => state.account);
+    const dispatch = useAppDispatch();
     return (
-        <Nav variant="pills" activeKey="1">
+        <Nav  className="d-flex justify-content-between" variant="pills" activeKey="1">
             <Nav.Item>
                 <NavLink to='/'>
                     Home
@@ -16,18 +18,16 @@ const Header = () => {
                     Create
                 </NavLink>
             </Nav.Item>
-            <NavDropdown title="Dropdown" id="nav-dropdown">
-                <NavDropdown.Item eventKey="4.1">
-                    <NavLink to='/login'>
-                        Login
-                    </NavLink>
-                </NavDropdown.Item>
-                <NavDropdown.Item eventKey="4.2">
-                    <NavLink to='/register'>
-                        Register
-                    </NavLink>
-                </NavDropdown.Item>
-            </NavDropdown>
+           {user ? <>{user.email} <button onClick={()=> dispatch(signOut())}>Signout</button> </>:<> <Nav.Item>
+                <NavLink to='/login'>
+                    Login
+                </NavLink>
+            </Nav.Item>
+            <Nav.Item>
+                <NavLink to='/register'>
+                    Register
+                </NavLink>
+            </Nav.Item></>}
         </Nav>
     );
 }
