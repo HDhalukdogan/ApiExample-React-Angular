@@ -1,5 +1,5 @@
 import React from 'react'
-import { FieldValues, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import agent from '../../app/api/agent';
 
@@ -7,9 +7,9 @@ export default function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit =  async (data: any) => {
+  const onSubmit = async (data: any) => {
     console.log('data', data)
-    await agent.Account.register(data).then(()=>console.log('created')).catch((error)=>console.log(error))
+    await agent.Account.register(data).then(() => console.log('created')).catch((error) => console.log(error))
     navigate('/')
   }
   return (
