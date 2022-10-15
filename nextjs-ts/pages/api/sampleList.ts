@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import agent from './agent'
+import agent from '../app/api/agent'
 
 
 export default async function handlerSamples(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    res.status(200).json(await fetch("http://localhost:5065/api/SampleEntities").then(async res => await res.json()))
-    //res.status(200).json(await agent.Sample.list())
+    //res.status(200).json(await fetch("http://localhost:5065/api/SampleEntities").then(async res => await res.json()))
+    res.status(200).json(await agent.Sample.list())
 }
 
 
