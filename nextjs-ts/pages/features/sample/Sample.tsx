@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore'
-import { fetchSamplesAsync, sampleSelectors } from './sampleSlice'
+import { fetchSamplesAsync } from './sampleSlice'
 
 export default function Sample() {
   const dispatch = useAppDispatch();
   const { loaded } = useAppSelector(state => state.sample)
-
 
   useEffect(() => {
     if (!loaded) {
