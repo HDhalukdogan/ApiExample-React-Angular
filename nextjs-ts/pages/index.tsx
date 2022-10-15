@@ -1,20 +1,22 @@
+import axios from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from '../styles/Home.module.css'
 import agent from './api/agent'
-import handler from './api/hello'
-interface SampleModel{
-  id:number;
-  name:string
+interface SampleModel {
+  id: number;
+  name: string
 }
 const Home: NextPage = () => {
-  const [samples, setSamples] = useState<SampleModel[]|null>(null)
+  const [samples, setSamples] = useState<SampleModel[] | null>(null)
   const [name, setName] = useState("")
   useEffect(() => {
-    agent.Sample.list().then(res =>setSamples(res))
-    console.log(handler)
+   // agent.Sample.list().then(res => setSamples(res))
+    //fetch('api/hello').then(async response => await response.json().then(res => setName(res.name)))
+    fetch('api/sampleList').then(async response => await response.json().then(res => setSamples(res)))
+    axios.get('api/hello').then(res => setName(res.data.name))
   }, [])
   return (
     <div className={styles.container}>
@@ -25,7 +27,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {samples?.map(s=> <div key={s.id}>{s.name}</div>)}
+        <h1>{name}</h1>
+        {samples?.map(s => <div key={s.id}>{s.name}</div>)}
       </main>
 
       <footer className={styles.footer}>
