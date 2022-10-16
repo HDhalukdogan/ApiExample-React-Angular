@@ -6,6 +6,7 @@ import agent from '../../app/api/agent';
 
 interface SampleState {
     loaded: boolean;
+    error: any;
 }
 
 const sampleAdapter = createEntityAdapter<SampleModel>();
@@ -13,12 +14,13 @@ const sampleAdapter = createEntityAdapter<SampleModel>();
 export const fetchSamplesAsync = createAsyncThunk<SampleModel[], void, { state: RootState }>(
     'sample/fetchSamplesAsync',
     async (_, thunkAPI) => {
-        try {
-            const response = await agent.Sample.list();
-            return response;
-        } catch (error: any) {
-            return thunkAPI.rejectWithValue({ error: error.data })
-        }
+        return await agent.Sample.list().then(response => response).catch(error => thunkAPI.rejectWithValue({ error: error.response }))
+        // try {
+        //     const response = await agent.Sample.list();
+        //     return response;
+        // } catch (error: any) {
+        //     return thunkAPI.rejectWithValue({ error: error.response })
+        // }
     }
 )
 export const fetchSampleAsync = createAsyncThunk<SampleModel, number>(
@@ -69,7 +71,8 @@ export const removeSampleAsync = createAsyncThunk<number, number>(
 export const sampleSlice = createSlice({
     name: 'sample',
     initialState: sampleAdapter.getInitialState<SampleState>({
-        loaded: false
+        loaded: false,
+        error: null
     }),
     reducers: {
 
@@ -82,7 +85,7 @@ export const sampleSlice = createSlice({
             state.loaded = true;
         });
         builder.addCase(fetchSamplesAsync.rejected, (state, action) => {
-            console.log(action);
+            state.error = action.payload
         });
         builder.addCase(fetchSampleAsync.pending, (state) => {
         })

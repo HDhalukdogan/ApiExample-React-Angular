@@ -10,7 +10,7 @@ import { SampleModel } from '../../app/models/SampleModel';
 export default function Sample() {
   const samples = useAppSelector(sampleSelectors.selectAll);
   const dispatch = useAppDispatch();
-  const { loaded } = useAppSelector(state => state.sample)
+  const { loaded, error } = useAppSelector(state => state.sample)
   const [show, setShow] = useState(false);
   const [entity, setEntity] = useState<SampleModel | null>(null)
   const handleClose = () => {
@@ -26,8 +26,12 @@ export default function Sample() {
       dispatch(fetchSamplesAsync());
     }
   }, [loaded, dispatch])
-
-
+if (error) {
+  if (error.error.data === "test error") {
+    return <h1>It is a test error.</h1>
+  }
+  return <h1>{error.error.data}</h1>
+}
   return (
     <div className='container'>
       <Table striped>

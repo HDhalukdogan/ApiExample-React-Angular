@@ -7,7 +7,11 @@ export const store = configureStore({
     reducer:{
         sample: sampleSlice.reducer,
         account: accountSlice.reducer
-    }
+    },
+    middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    })
 })
 
 

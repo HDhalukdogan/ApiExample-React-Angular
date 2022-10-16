@@ -9,6 +9,8 @@ import Register from "../../features/account/Register";
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
+import { Button } from "react-bootstrap";
+import agent from "../api/agent";
 
 function App() {
 
@@ -24,10 +26,15 @@ function App() {
   useEffect(() => {
     initApp()
   }, [initApp])
+
+  const fetchError=()=>{
+    agent.Sample.list().then(res=>console.log(res.length)).catch(err=>alert(err.response.data))
+  }
   return (
     <div className="App">
       <Header />
       <div className="container">
+        <Button onClick={fetchError}>Test error</Button>
       <Routes>
         <Route path='/' element={<Sample />} />
         <Route path='/details/:id' element={<SampleDetails />} />

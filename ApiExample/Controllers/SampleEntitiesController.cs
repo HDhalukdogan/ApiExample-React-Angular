@@ -26,6 +26,10 @@ namespace ApiExample.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SampleEntity>>> GetSampleEntity()
         {
+            // if (true)
+            // {
+            //     return BadRequest("test error");
+            // }
             return await _context.SampleEntity.ToListAsync();
         }
 
