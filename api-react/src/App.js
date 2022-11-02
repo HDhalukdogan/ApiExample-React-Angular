@@ -6,6 +6,7 @@ import { Container } from '@mui/material';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import ListComponent from './ListComponent';
 import FileUpload from './FileUpload';
+import Work from './Work';
 //https://laratutorials.com/react-datatables-dynamic-data-example/
 function App() {
   const [users, setUsers] = useState([]);
@@ -34,6 +35,7 @@ function App() {
   }
   return (
     <div className="App">
+      <Work/>
       <Container>
         {entities.length > 0 && <ListComponent data={entities} />}
         <h1>Users</h1>
