@@ -5,7 +5,7 @@ import {  HubConnectionBuilder } from "@microsoft/signalr";
 export default function Work() {
     const [count, setCount] = useState(0);
     const [intervalId, setIntervalId] = useState(0);
-    const [dis, setDis] = useState(false)
+    const [dis, setDis] = useState()
 
     const [hubConnection, setHubConnection] = useState()
     const createHubConnection = async () => {
@@ -13,6 +13,12 @@ export default function Work() {
         try {
             await hubCn.start();
             console.log("connectionId",hubCn.connectionId)
+            hubCn.invoke("GetWorkHubTest").then(() => { 
+                hubCn.on("ReceiveWorkTest",res => {
+                    console.log('res', res)
+                    setDis(res)
+                })
+             }).catch(err=>console.log('err', err))
             setHubConnection(hubCn)
         } catch (e) {
             console.log("e", e)
@@ -30,14 +36,12 @@ export default function Work() {
     }
     useEffect(() => {
         if (hubConnection) {
-            hubConnection.on("ReceiveWork",res => setDis(res))
+            hubConnection.on("ReceiveWork",res => {
+                console.log('res', res)
+                setDis(res)
+            })
         }
     }, [hubConnection])
-
-    const handleDis = () => {
-        sendDis()
-    }
-
     const handleClick = () => {
         if (intervalId) {
             clearInterval(intervalId);
@@ -54,7 +58,7 @@ export default function Work() {
     return (
         <div>
             <h1>{count}</h1>
-            <button onClick={handleDis}>{dis ? "Enable Counter Button" : "Disable Counter Button"}</button>
+            <button onClick={sendDis}>{dis ? "Enable Counter Button" : "Disable Counter Button"}</button>
             <button disabled={dis} onClick={handleClick}>
                 {intervalId ? "Stop counting" : "Start counting"}
             </button>
