@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux'
 import { createSampleAsync } from "./sampleSlice";
 import { useNavigate } from 'react-router-dom';
+import HubStore from "../../app/store/hubStore";
 
 export default function SampleCreate() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
-
+    const hubStore = new HubStore();
     const dispatch = useDispatch()
 
     const onSubmit = (data: any) => {
         dispatch(createSampleAsync(data) as any);
         navigate('/');
     }
+
+    useEffect(() => {
+        hubStore.createHubConnection();
+        hubStore.hubConnection?.on('Created', (res) => {
+            console.log('res', res)
+        })
+    }, [hubStore])
+    
 
 
     return (

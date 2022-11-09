@@ -8,6 +8,16 @@ namespace ApiExample.Hubs
         public WorkHub()
         {
         }
+
+        public override async Task OnConnectedAsync()
+        {
+            await Clients.All.SendAsync("Connected", "Hi");
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await base.OnDisconnectedAsync(exception);
+        }
         public async Task GetWorkHub(bool dis)
         {
             test = dis;

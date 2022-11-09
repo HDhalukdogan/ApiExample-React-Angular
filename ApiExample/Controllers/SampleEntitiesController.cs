@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using ApiExample.Data;
 using ApiExample.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using ApiExample.Hubs;
+using System.Security.Claims;
 
 namespace ApiExample.Controllers
 {
@@ -16,10 +19,12 @@ namespace ApiExample.Controllers
     public class SampleEntitiesController : ControllerBase
     {
         private readonly ApiExampleContext _context;
+        private readonly IHubContext<WorkHub> _hubContext;
 
-        public SampleEntitiesController(ApiExampleContext context)
+        public SampleEntitiesController(ApiExampleContext context, IHubContext<WorkHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
         // GET: api/SampleEntities
@@ -84,9 +89,11 @@ namespace ApiExample.Controllers
         [HttpPost]
         public async Task<ActionResult<SampleEntity>> PostSampleEntity(SampleEntity sampleEntity)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             _context.SampleEntity.Add(sampleEntity);
             await _context.SaveChangesAsync();
-
+            await _hubContext.Clients.User(userId).SendAsync("Created",$"Created From {userId}");
+            //await _hubContext.Clients.All.SendAsync("Created","Created From User");
             return CreatedAtAction("GetSampleEntity", new { id = sampleEntity.Id }, sampleEntity);
         }
 
@@ -94,6 +101,7 @@ namespace ApiExample.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSampleEntity(int id)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var sampleEntity = await _context.SampleEntity.FindAsync(id);
             if (sampleEntity == null)
             {
@@ -102,7 +110,7 @@ namespace ApiExample.Controllers
 
             _context.SampleEntity.Remove(sampleEntity);
             await _context.SaveChangesAsync();
-
+            await _hubContext.Clients.User(userId).SendAsync("Deleted",$"Deleted From {userId}");
             return NoContent();
         }
 

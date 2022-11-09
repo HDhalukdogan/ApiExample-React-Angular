@@ -24,7 +24,8 @@ namespace ApiExample.Services
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim("TestType", "TestClaim")
+                new Claim("TestType", "TestClaim"),
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString())
             };
             var roles = await _userManager.GetRolesAsync(user);
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));

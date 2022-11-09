@@ -11,17 +11,19 @@ import { useDispatch } from "react-redux";
 import { fetchCurrentUser } from "../../features/account/accountSlice";
 import { Button } from "react-bootstrap";
 import agent from "../api/agent";
+import HubStore from "../store/hubStore";
 
 function App() {
 
   const dispatch = useDispatch()
-
+  const hubStore = new HubStore();
   const initApp = useCallback(async () => {
     try {
       await dispatch(fetchCurrentUser() as any)
     } catch (error) {
       console.log(error);
     }
+    hubStore.createHubConnection()
   }, [dispatch])
   useEffect(() => {
     initApp()
